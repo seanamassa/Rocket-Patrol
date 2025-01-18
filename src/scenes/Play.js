@@ -27,34 +27,70 @@ class Play extends Phaser.Scene{
         keyRESET = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
+
+        // initialize score
+        this.p1Score = 0
+        //display score
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backroundColor: '#F3B141',
+            color: "#843605",
+            align: 'right',
+            padding: {
+                top: 5, 
+                bottom: 5,
+            },
+            fixedWidth: 100
         }
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig)
+        
+        // GAME OVER flag
+        this.gameOver = false
+
+        // 60 second play clock 
+        scoreConfig.fixedWidth = 0
+        this.clock = this.time.delayedCall (60000, () => {
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0,5)
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5)
+            this.gameOver = true
+        }, null,this)
+    }
 
     update(){
+        // check ket input for restart
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)){
+            this.scene.restart()
+        }
         this.starfield.tilePositionX -= 4
+        if(!this.gameOver){
         this.p1Rocket.update()
 
         this.ship01.update() //update spaceships
         this.ship02.update()
         this.ship03.update()
-
+        }
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)){
             //console.log('kaboom ship 03')
             this.p1Rocket.reset()
             //this.ship03.reset()
             this.shipExplode(this.ship03)
+
         }
         if(this.checkCollision(this.p1Rocket, this.ship02)){
             //console.log('kaboom ship 02')
             this.p1Rocket.reset()
             //this.ship02.reset()
             this.shipExplode(this.ship02)
+
         }
         if(this.checkCollision(this.p1Rocket, this.ship01)){
             //console.log('kaboom ship 01')
             this.p1Rocket.reset()
             //this.ship01.reset()
             this.shipExplode(this.ship01)
+
         }
     }
 
@@ -76,8 +112,12 @@ class Play extends Phaser.Scene{
         boom.anims.play('explode')              // play explosion animation
         boom.on('animationcomplete', () =>{     // callback after anim completes
             ship.reset()                        // reset ship position
-            ship.aplha = 1                      // make ship visible
-            boom.destroy()                      // remove explosion sprite
-        } )
+            ship.alpha = 1                      // make ship visible
+            boom.destroy()
+            this.sound.play('sfx-explosion')                      // remove explosion sprite
+        })
+        this.p1Score += ship.points
+        this.scoreLeft.text = this.p1Score
+ 
     }
 }
