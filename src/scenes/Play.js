@@ -22,6 +22,8 @@ class Play extends Phaser.Scene{
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0,0)
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2,'spaceship', 0, 20).setOrigin(0,0)
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship',0 ,10).setOrigin(0,0)
+        this.UFO01 = new UFO(this, game.config.width, borderUISize*7 + borderPadding*6, 'ufo',0 ,50).setOrigin(0,0)
+        this.UFO01.moveSpeed = game.settings.ufoSpeed 
         //define keys
         keyFIRE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F)
         keyRESET = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
@@ -74,8 +76,16 @@ class Play extends Phaser.Scene{
         this.ship01.update() //update spaceships
         this.ship02.update()
         this.ship03.update()
+        this.UFO01.update()
         }
         // check collisions
+        if(this.checkCollisionUFO(this.p1Rocket, this.UFO01)){
+            //console.log('kaboom ship 01')
+            this.p1Rocket.reset()
+            //this.ship01.reset()
+            this.UFOExplode(this.UFO01)
+
+        }
         if(this.checkCollision(this.p1Rocket, this.ship03)){
             //console.log('kaboom ship 03')
             this.p1Rocket.reset()
@@ -97,6 +107,7 @@ class Play extends Phaser.Scene{
             this.shipExplode(this.ship01)
 
         }
+        
     }
 
     checkCollision(rocket,ship){
@@ -108,6 +119,7 @@ class Play extends Phaser.Scene{
                 return false
             }
     }
+
 
     shipExplode(ship){
         // temp hide ship
@@ -125,4 +137,36 @@ class Play extends Phaser.Scene{
         this.scoreLeft.text = this.p1Score
  
     }
+    checkCollisionUFO(rocket, UFO) {
+        if(rocket.x < UFO.x + UFO.width &&
+            rocket.x + rocket.width > UFO.x &&
+            rocket.y < UFO.y + UFO.height &&
+            rocket.height + rocket.y > UFO.y) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+        
+        UFOExplode(UFO){
+            // temp hide ship
+            UFO.alpha = 0
+            //create explosion sprite at ship's position
+            let boom = this.add.sprite(UFO.x, UFO.y, 'explosion').setOrigin(0,0);
+            boom.anims.play('explode')              // play explosion animation
+            boom.on('animationcomplete', () =>{     // callback after anim completes
+                UFO.reset()                        // reset ship position
+                UFO.alpha = 1                      // make ship visible
+                boom.destroy()
+                this.sound.play('sfx-explosion')                      // remove explosion sprite
+            })
+            this.p1Score += UFO.points
+            this.scoreLeft.text = this.p1Score
+        }
+
+
 }
+
+
+        
