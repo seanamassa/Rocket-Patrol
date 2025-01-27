@@ -40,7 +40,7 @@ class Menu extends Phaser.Scene{
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backroundColor: "#F3B141",
+            backgroundColor: "#F3B141",
             align: 'right',
             padding: {
             top: 5,
@@ -54,17 +54,20 @@ class Menu extends Phaser.Scene{
         menuConfig) .setOrigin(0.5)
         this.add.text(game.config.width/2, game.config.heigh/2, 'Use <--> arrows to move & (F) to fire', menuConfig)
         .setOrigin(0.5)
-        menuConfig.backroundColor = '#00FF00'
+        menuConfig.backgroundColor = '#00FF00'
         menuConfig.color = '#000'
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press <- for Novice or -> for Expert', menuConfig).setOrigin(0.5)
 
         //this.add.text(20,20, "Rocket Patrol Menu")
-        this.scene.start("playScene")
-    }
-<<<<<<< HEAD
-<<<<<<< HEAD
+        //this.scene.start("playScene")
+        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
 
-=======
+        // change difficulty on menu
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.scene.start("menuScene")
+          }
+    }
  
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
@@ -87,7 +90,4 @@ class Menu extends Phaser.Scene{
         }
       } 
         
->>>>>>> parent of 7ad16fb (Revert "complete working game")
-=======
->>>>>>> parent of ee4f61f (complete working game)
 }
