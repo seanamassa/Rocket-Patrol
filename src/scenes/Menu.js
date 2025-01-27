@@ -8,7 +8,6 @@ class Menu extends Phaser.Scene{
         this.load.image('rocket', './assets/rocket.png')
         this.load.image('spaceship', './assets/spaceship.png')
         this.load.image('starfield', './assets/starfield.png')
-        this.load.image('ufo', './assets/ufo.png')
         
         // load audio
         this.load.audio('sfx-select', './assets/sfx-select.wav')
@@ -79,7 +78,6 @@ class Menu extends Phaser.Scene{
           // easy mode
           game.settings = {
             spaceshipSpeed: 3,
-            ufoSpeed: 7,
             gameTimer: 60000    
           }
           this.sound.play('sfx-select')
@@ -89,7 +87,6 @@ class Menu extends Phaser.Scene{
           // hard mode
           game.settings = {
             spaceshipSpeed: 4,
-            ufoSpeed: 12,
             gameTimer: 45000    
           }
           this.sound.play('sfx-select')
