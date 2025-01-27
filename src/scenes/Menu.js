@@ -62,31 +62,5 @@ class Menu extends Phaser.Scene{
         //this.add.text(20,20, "Rocket Patrol Menu")
         this.scene.start("playScene")
     }
-<<<<<<< HEAD
- 
-    update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-          // easy mode
-          game.settings = {
-            spaceshipSpeed: 3,
-            ufoSpeed: 7,
-            gameTimer: 60000    
-          }
-          this.sound.play('sfx-select')
-          this.scene.start('playScene')    
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-          // hard mode
-          game.settings = {
-            spaceshipSpeed: 4,
-            ufoSpeed: 12,
-            gameTimer: 45000    
-          }
-          this.sound.play('sfx-select')
-          this.scene.start('playScene')    
-        }
-      } 
-        
-=======
->>>>>>> parent of ee4f61f (complete working game)
+
 }
